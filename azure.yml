@@ -1,0 +1,38 @@
+# azure-pipelines.yml
+trigger:
+  branches:
+    include:
+      - main  # Automatically triggers pipeline on changes to the 'main' branch
+
+pool:
+  vmImage: 'ubuntu-latest'  # Use an Ubuntu agent
+
+variables:
+  buildConfiguration: 'Release'
+
+steps:
+  # Checkout the code
+  - task: Checkout@1
+
+  # Install dependencies
+  - script: |
+      echo "Installing dependencies..."
+      npm install
+    displayName: 'Install Dependencies'
+
+  # Build the application
+  - script: |
+      echo "Building the project..."
+      npm run build
+    displayName: 'Build Project'
+
+  # Run tests
+  - script: |
+      echo "Running tests..."
+      npm test
+    displayName: 'Run Tests'
+
+  # Archive build artifacts
+  - task: PublishBuildArtifacts@1
+    inputs:
+      PathtoPublish: 'dist'  # Adjust this path based
